@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deepak Boutique Product Gallery</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Header with Navigation -->
+    <header class="header">
+        <a href="#" class="logo" data-page="home">
+            <i class="fas fa-eye"></i> Deepak Boutique
+        </a>
+
+        <button class="menu-toggle">
+            <i class="fas fa-bars"></i>
+        </button>
+
+        <ul class="nav-links">
+            <li><a href="#" class="active" data-page="home">HOME</a></li>
+            <li><a href="#" data-page="about">ABOUT</a></li>
+            <li><a href="#" data-page="contact">CONTACT</a></li>
+        </ul>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Home Page -->
+        <section id="home-page" class="page active">
+            <!-- Category Filter -->
+            <div class="category-filter">
+                <button class="category-btn active" data-category="all">ALL</button>
+                <button class="category-btn" data-category="electronics">SUIT</button>
+                <button class="category-btn" data-category="fashion">SARARA</button>
+                <button class="category-btn" data-category="home">LEHGA</button>
+                <button class="category-btn" data-category="sports">SADI</button>
+            </div>
+
+            <!-- Product Gallery - 5 per row, portrait images -->
+            <div class="gallery-grid">
+                <!-- Product 1 - Yoga Mat -->
+                <div class="product-item" data-category="sports">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/49888_7Main_bf164335-fe8e-4975-afe6-a9e1554ba45c.jpg?v=1761741189&width=1080" alt="Premium Yoga Mat" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Red Woven Design Silk Blend A-Line Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 2 - Smart Watch -->
+                <div class="product-item" data-category="electronics">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/51629_1.jpg?v=1767026133&width=1800" alt="Smart Watch Pro" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Black Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 3 - Sneakers -->
+                <div class="product-item" data-category="fashion">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/green-embroidered-silk-blend-straight-suit-set-with-dupatta-51786.jpg?v=1767025499&width=1800" alt="Urban Sneakers" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Green Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 4 - Desk Lamp -->
+                <div class="product-item" data-category="home">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/green-embroidered-chinon-straight-suit-set-with-dupatta-51833.jpg?v=1766940402&width=1800" alt="Minimalist Desk Lamp" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Green Embroidered Chinon Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 5 - Headphones -->
+                <div class="product-item" data-category="electronics">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/20231O.webp?v=1769084071&width=1080" alt="Noise-Cancelling Headphones" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">NOISE-CANCELLING HEADPHONES</h3>
+                    </div>
+                </div>
+
+                <!-- Product 6 - Backpack -->
+                <div class="product-item" data-category="fashion">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/34800H.webp?v=1769084386&width=1080" alt="Leather Backpack" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Pink Printed Cotton Straight Suit With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 7 - Coffee Maker -->
+                <div class="product-item" data-category="home">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/purple-embroidered-silk-blend-straight-suit-set-with-dupatta-51628.jpg?v=1767026459&width=1800" alt="Espresso Machine" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Purple Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 8 - Water Bottle -->
+                <div class="product-item" data-category="sports">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/99695_8.webp?v=1769081938&width=1800" alt="Insulated Water Bottle" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Mustard Printed Cotton Blend Straight Suit Sets With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 9 - Camera -->
+                <div class="product-item" data-category="electronics">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/beige-woven-design-silk-straight-kurta-with-trouser-and-dupatta-libas-1.jpg?v=1760898173&width=1800" alt="Mirrorless Camera" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Beige Woven Design Silk Straight Kurta With Trouser & Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 10 - Sunglasses -->
+                <div class="product-item" data-category="fashion">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/99055O_8_d1faa92c-5e0c-4627-87e0-81d0af24c0a1.webp?v=1769081410&width=1800" alt="Designer Sunglasses" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Pink Printed Cotton Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 11 - Chair -->
+                <div class="product-item" data-category="home">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/400706_8Main_7f3e6cad-1e68-4e91-9763-76217fbfde38.jpg?v=1763545525&width=1800" alt="Modern Chair" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Blue Printed Cotton Straight Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 12 - Basketball -->
+                <div class="product-item" data-category="sports">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/36610_e72557c9-9593-4128-8177-0c3cd47a1ad8.jpg?v=1755942406&width=1800" alt="Professional Basketball" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Blue Printed Cotton Straight Suit With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 13 - Watch -->
+                <div class="product-item" data-category="fashion">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/1_5b07da07-77c7-4199-b1f8-10b5e2c5c6fa.jpg?v=1755945066&width=1800" alt="Luxury Watch" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Blue Embroidered Silk Blend Straight Suit With Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 14 - Speaker -->
+                <div class="product-item" data-category="electronics">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/49278_8main.webp?v=1769080645&width=1800" alt="Wireless Speaker" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Magenta Woven Design Chanderi Silk A-Line Kurta With Trousers & Dupatta</h3>
+                    </div>
+                </div>
+
+                <!-- Product 15 - Perfume -->
+                <div class="product-item" data-category="fashion">
+                    <div class="product-image-container">
+                        <img src="https://www.libas.in/cdn/shop/files/99541O_8Main_d14a8702-ddce-4d29-b05d-fd810a578590.jpg?v=1755942545&width=1800" alt="Premium Perfume" class="product-image">
+                    </div>
+                    <div class="product-name-container">
+                        <h3 class="product-name">Rust Embroidered Cotton Blend Anarkali Suit Set With Dupatta</h3>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Page -->
+        <section id="about-page" class="page">
+            <div class="about-content">
+                <h1 class="about-title">ABOUT US</h1>
+                <p class="about-text">
+                    We are a Deepak Boutique-first company dedicated to showcasing products in their purest form.
+                    In a world saturated with descriptions, prices, and marketing messages, we believe
+                    in letting products speak for themselves through clean, focused Deepak Boutique presentation.
+                </p>
+                <p class="about-text">
+                    Our philosophy is simple: remove all distractions and let the design, craftsmanship,
+                    and beauty of each product shine through. No descriptions. No prices. Just pure Deepak Boutique
+                    appreciation.
+                </p>
+                <p class="about-text">
+                    Founded by designers and photographers who were tired of cluttered e-commerce experiences,
+                    we've created a space where form and aesthetics take center stage.
+                </p>
+
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <span class="stat-number">500+</span>
+                        <span class="stat-label">PRODUCTS SHOWCASED</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">3</span>
+                        <span class="stat-label">YEARS EXPERIENCE</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">50+</span>
+                        <span class="stat-label">BRANDS FEATURED</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-number">100%</span>
+                        <span class="stat-label">Deepak Boutique FOCUS</span>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Contact Page -->
+        <section id="contact-page" class="page">
+            <div class="contact-content">
+                <h1 class="contact-title">CONTACT US</h1>
+
+                <div class="contact-info">
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="contact-detail">
+                            Mitha Bazar Jalandhar<br>
+                            Punjab<br>
+                            104001, India
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        <div class="contact-detail">
+                            +91 8699522873<br>
+                            Mon-Fri, 9am-6pm EST
+                        </div>
+                    </div>
+
+                    <div class="contact-item">
+                        <div class="contact-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="contact-detail">
+                            info@deepakboutique.shop<br>
+                            support@deepakboutique.shop
+                        </div>
+                    </div>
+                </div>
+
+                <form class="contact-form">
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="YOUR NAME" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="email" class="form-input" placeholder="YOUR EMAIL" required>
+                    </div>
+
+                    <div class="form-group">
+                        <input type="text" class="form-input" placeholder="SUBJECT" required>
+                    </div>
+
+                    <div class="form-group">
+                        <textarea class="form-input" placeholder="YOUR MESSAGE" required></textarea>
+                    </div>
+
+                    <button type="submit" class="submit-btn">SEND MESSAGE</button>
+                </form>
+            </div>
+        </section>
+    </main>
+
+    <!-- Fullscreen View -->
+    <div class="fullscreen-view">
+        <button class="close-fullscreen">
+            <i class="fas fa-times"></i>
+        </button>
+        <button class="nav-arrow prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="fullscreen-content">
+            <img src="" alt="Fullscreen Product" class="fullscreen-image">
+            <h3 class="fullscreen-name"></h3>
+        </div>
+        <button class="nav-arrow next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        Deepak Boutique PRODUCT GALLERY • 5 PRODUCTS PER ROW • PORTRAIT IMAGES • NO DESCRIPTIONS • NO PRICES
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
