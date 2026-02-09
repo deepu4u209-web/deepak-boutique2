@@ -3,230 +3,1030 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Deepak Boutique Product Gallery</title>
+    <title>Deepak Boutique | Premium Collection</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        :root { 
+            --accent: #ff6b8b; 
+            --bg: #0a0a0a; 
+            --card: #141414; 
+            --text: #eee;
+            --border: #222;
+            --gray: #888;
+        }
+        
+        * { 
+            margin: 0; 
+            padding: 0; 
+            box-sizing: border-box; 
+            font-family: 'Segoe UI', sans-serif; 
+        }
+        
+        body { 
+            background: var(--bg); 
+            color: var(--text); 
+            line-height: 1.6; 
+            overflow-x: hidden;
+        }
+        
+        /* ===== HEADER & NAVIGATION ===== */
+        .header { 
+            position: fixed; 
+            width: 100%; 
+            padding: 15px 5%; 
+            background: rgba(10,10,10,0.95); 
+            backdrop-filter: blur(10px); 
+            z-index: 100; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            border-bottom: 1px solid var(--border); 
+        }
+        
+        .logo { 
+            font-size: 22px; 
+            font-weight: bold; 
+            color: #fff; 
+            text-decoration: none; 
+            cursor: pointer; 
+        }
+        
+        .logo span { 
+            color: var(--accent); 
+        }
+        
+        .nav-links { 
+            display: flex; 
+            list-style: none; 
+            gap: 25px; 
+            align-items: center;
+        }
+        
+        .nav-links a { 
+            color: var(--gray); 
+            text-decoration: none; 
+            font-size: 14px; 
+            cursor: pointer; 
+            transition: 0.3s; 
+        }
+        
+        .nav-links a:hover, 
+        .nav-links a.active { 
+            color: var(--accent); 
+        }
+        
+        /* ===== MAIN CONTENT ===== */
+        .main-content { 
+            padding: 100px 5% 40px; 
+            min-height: 90vh; 
+        }
+        
+        .page { 
+            display: none; 
+            animation: fadeIn 0.4s forwards; 
+        }
+        
+        .page.active { 
+            display: block; 
+        }
+        
+        @keyframes fadeIn { 
+            from { opacity: 0; } 
+            to { opacity: 1; } 
+        }
+        
+        /* ===== HERO SECTION ===== */
+        .hero-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .hero-title {
+            font-size: 36px;
+            font-weight: 300;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+        
+        .hero-subtitle {
+            color: var(--gray);
+            max-width: 600px;
+            margin: 0 auto;
+            font-size: 16px;
+        }
+        
+        /* ===== CATEGORY FILTER ===== */
+        .category-filter { 
+            display: flex; 
+            gap: 10px; 
+            margin-bottom: 30px; 
+            overflow-x: auto; 
+            padding-bottom: 10px; 
+        }
+        
+        .category-btn { 
+            padding: 8px 20px; 
+            border-radius: 20px; 
+            border: 1px solid #333; 
+            background: transparent; 
+            color: var(--gray); 
+            cursor: pointer; 
+            white-space: nowrap;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+        
+        .category-btn.active { 
+            background: var(--accent); 
+            color: #fff; 
+            border-color: var(--accent); 
+        }
+        
+        .category-btn:hover:not(.active) {
+            background: rgba(255, 255, 255, 0.05);
+            border-color: #444;
+        }
+        
+        /* ===== PRODUCT GRID ===== */
+        .gallery-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); 
+            gap: 25px; 
+        }
+        
+        .product-item { 
+            background: var(--card); 
+            border-radius: 12px; 
+            overflow: hidden; 
+            border: 1px solid var(--border); 
+            transition: 0.3s; 
+            position: relative;
+        }
+        
+        .product-item:hover { 
+            border-color: var(--accent); 
+            transform: translateY(-5px); 
+        }
+        
+        .product-image-container {
+            width: 100%;
+            height: 400px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .product-image { 
+            width: 100%; 
+            height: 100%; 
+            object-fit: cover; 
+            transition: transform 0.5s ease;
+        }
+        
+        .product-item:hover .product-image {
+            transform: scale(1.05);
+        }
+        
+        .product-info { 
+            padding: 20px; 
+        }
+        
+        .product-category {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-bottom: 8px;
+        }
+        
+        .product-name { 
+            font-size: 16px; 
+            font-weight: 500;
+            margin-bottom: 10px;
+            height: 45px;
+            overflow: hidden;
+            line-height: 1.4;
+        }
+        
+        .product-price { 
+            color: var(--accent); 
+            font-weight: bold; 
+            margin: 10px 0; 
+            font-size: 18px;
+            letter-spacing: 0;
+        }
+        
+        .add-to-cart-btn { 
+            width: 100%; 
+            padding: 12px; 
+            background: var(--accent); 
+            border: none; 
+            color: #fff; 
+            border-radius: 6px; 
+            cursor: pointer; 
+            font-weight: 600;
+            font-size: 14px;
+            transition: background 0.3s ease;
+        }
+        
+        .add-to-cart-btn:hover {
+            background: #ff5570;
+        }
+        
+        /* ===== FLOATING CART ===== */
+        #floatingCartIcon { 
+            position: fixed; 
+            bottom: 30px; 
+            right: 30px; 
+            background: var(--accent); 
+            width: 60px; 
+            height: 60px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            cursor: pointer; 
+            z-index: 99;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 5px 15px rgba(255, 107, 139, 0.3);
+            transition: all 0.3s ease;
+        }
+        
+        #floatingCartIcon:hover {
+            transform: translateY(-3px) scale(1.05);
+            box-shadow: 0 8px 20px rgba(255, 107, 139, 0.4);
+        }
+        
+        .floating-cart-count { 
+            position: absolute; 
+            top: 0; 
+            right: 0; 
+            background: #fff; 
+            color: #000; 
+            font-size: 12px; 
+            width: 22px; 
+            height: 22px; 
+            border-radius: 50%; 
+            display: flex; 
+            align-items: center; 
+            justify-content: center; 
+            font-weight: bold; 
+            border: 2px solid var(--bg);
+        }
+        
+        /* ===== CART MODAL ===== */
+        .cart-modal { 
+            position: fixed; 
+            right: -400px; 
+            top: 0; 
+            width: 350px; 
+            height: 100%; 
+            background: #111; 
+            z-index: 1000; 
+            padding: 25px; 
+            transition: 0.4s; 
+            border-left: 1px solid var(--border);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .cart-modal.active { 
+            right: 0; 
+        }
+        
+        .cart-modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .cart-modal-title {
+            font-size: 20px;
+            font-weight: 500;
+        }
+        
+        .close-cart {
+            background: none;
+            border: none;
+            color: var(--gray);
+            font-size: 24px;
+            cursor: pointer;
+            width: 36px;
+            height: 36px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            transition: all 0.3s ease;
+        }
+        
+        .close-cart:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+        }
+        
+        .cart-modal-body {
+            flex: 1;
+            overflow-y: auto;
+            margin-bottom: 20px;
+        }
+        
+        .cart-modal-item {
+            display: flex;
+            gap: 12px;
+            padding: 12px;
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 8px;
+            margin-bottom: 10px;
+            align-items: center;
+        }
+        
+        .cart-modal-item-image {
+            width: 60px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 4px;
+        }
+        
+        .cart-modal-item-details {
+            flex: 1;
+        }
+        
+        .cart-modal-item-name {
+            font-size: 13px;
+            font-weight: 500;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+        
+        .cart-modal-item-price {
+            color: var(--accent);
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 8px;
+        }
+        
+        .cart-modal-item-actions {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .cart-modal-quantity-btn {
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            color: white;
+            width: 24px;
+            height: 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+        }
+        
+        .cart-modal-quantity-input {
+            width: 35px;
+            text-align: center;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border);
+            color: white;
+            padding: 4px;
+            border-radius: 4px;
+            font-size: 12px;
+        }
+        
+        .cart-modal-remove {
+            background: none;
+            border: none;
+            color: #ff4757;
+            cursor: pointer;
+            font-size: 12px;
+            padding: 4px 8px;
+            border-radius: 4px;
+        }
+        
+        .cart-modal-summary {
+            border-top: 1px solid var(--border);
+            padding-top: 20px;
+        }
+        
+        .cart-modal-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            font-size: 18px;
+            font-weight: 600;
+        }
+        
+        .cart-modal-checkout {
+            width: 100%;
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        .cart-modal-checkout:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+        
+        /* ===== ABOUT PAGE ===== */
+        .about-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        .about-text {
+            color: var(--gray);
+            line-height: 1.8;
+            margin-bottom: 25px;
+            font-size: 16px;
+        }
+        
+        .about-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
+            margin-top: 40px;
+        }
+        
+        .stat-item {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-size: 32px;
+            font-weight: 300;
+            color: var(--accent);
+            display: block;
+            margin-bottom: 8px;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: var(--gray);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* ===== CONTACT PAGE ===== */
+        .contact-content {
+            max-width: 900px;
+            margin: 0 auto;
+        }
+        
+        .contact-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .contact-info {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .contact-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            padding: 20px;
+            background: var(--card);
+            border-radius: 8px;
+            border: 1px solid var(--border);
+        }
+        
+        .contact-icon {
+            font-size: 20px;
+            color: var(--accent);
+            min-width: 30px;
+        }
+        
+        .contact-detail {
+            color: var(--gray);
+            font-size: 14px;
+            line-height: 1.6;
+        }
+        
+        .contact-detail strong {
+            color: #fff;
+            font-weight: 500;
+        }
+        
+        .contact-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--accent);
+        }
+        
+        textarea.form-input {
+            min-height: 120px;
+            resize: vertical;
+            font-family: inherit;
+        }
+        
+        .submit-btn {
+            padding: 12px;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 14px;
+        }
+        
+        /* ===== ADMIN PAGE ===== */
+        .admin-container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid var(--border);
+        }
+        
+        .admin-title {
+            font-size: 28px;
+            font-weight: 300;
+        }
+        
+        .admin-actions {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .admin-btn {
+            padding: 8px 16px;
+            background: var(--card);
+            border: 1px solid var(--border);
+            color: #fff;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        
+        .admin-btn.primary {
+            background: var(--accent);
+            border-color: var(--accent);
+        }
+        
+        .admin-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+        }
+        
+        .admin-btn.primary:hover {
+            background: #ff5570;
+        }
+        
+        .admin-logout {
+            padding: 8px 20px;
+            background: var(--accent);
+            border: none;
+            color: white;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 13px;
+        }
+        
+        .admin-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        
+        .admin-stat {
+            background: var(--card);
+            padding: 25px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            text-align: center;
+        }
+        
+        .admin-section {
+            background: var(--card);
+            border-radius: 10px;
+            padding: 25px;
+            margin-bottom: 25px;
+            border: 1px solid var(--border);
+        }
+        
+        .admin-section-title {
+            font-size: 20px;
+            margin-bottom: 20px;
+            color: #fff;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        /* Admin Tables */
+        .admin-table { 
+            width: 100%; 
+            border-collapse: collapse; 
+            margin-top: 15px; 
+            font-size: 14px; 
+        }
+        
+        .admin-table th, 
+        .admin-table td { 
+            text-align: left; 
+            padding: 12px; 
+            border-bottom: 1px solid var(--border); 
+        }
+        
+        .admin-table th {
+            color: var(--gray);
+            font-weight: 500;
+            text-transform: uppercase;
+            font-size: 12px;
+            letter-spacing: 1px;
+        }
+        
+        .admin-table td {
+            color: #ddd;
+        }
+        
+        .table-actions {
+            display: flex;
+            gap: 8px;
+        }
+        
+        .action-btn {
+            background: none;
+            border: none;
+            color: var(--gray);
+            cursor: pointer;
+            padding: 6px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+        
+        .action-btn.edit {
+            color: #4dabf7;
+        }
+        
+        .action-btn.delete {
+            color: #ff6b8b;
+        }
+        
+        .action-btn.view {
+            color: #51cf66;
+        }
+        
+        .action-btn:hover {
+            background: rgba(255, 255, 255, 0.05);
+        }
+        
+        /* Product Form */
+        .product-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+        
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        
+        .form-group label {
+            font-size: 13px;
+            color: var(--gray);
+            font-weight: 500;
+        }
+        
+        .form-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: flex-end;
+            margin-top: 20px;
+            padding-top: 20px;
+            border-top: 1px solid var(--border);
+        }
+        
+        /* ===== FOOTER ===== */
+        .footer {
+            text-align: center;
+            padding: 25px 20px;
+            color: var(--gray);
+            font-size: 12px;
+            border-top: 1px solid var(--border);
+            margin-top: 50px;
+        }
+        
+        /* ===== NOTIFICATION ===== */
+        .notification {
+            position: fixed;
+            top: 100px;
+            right: 20px;
+            background: var(--accent);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 6px;
+            z-index: 1000;
+            animation: slideInRight 0.3s ease-out;
+            font-weight: 500;
+            font-size: 14px;
+        }
+        
+        @keyframes slideInRight {
+            from { transform: translateX(100%); opacity: 0; }
+            to { transform: translateX(0); opacity: 1; }
+        }
+        
+        /* ===== UTILITY CLASSES ===== */
+        .empty-state {
+            text-align: center;
+            padding: 40px 20px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #444;
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        /* ===== RESPONSIVE DESIGN ===== */
+        @media (max-width: 768px) {
+            .header {
+                padding: 12px 20px;
+            }
+            
+            .logo {
+                font-size: 18px;
+            }
+            
+            .nav-links {
+                position: fixed;
+                top: 60px;
+                left: 0;
+                width: 100%;
+                background: rgba(10, 10, 10, 0.95);
+                flex-direction: column;
+                padding: 20px;
+                gap: 0;
+                transform: translateY(-100%);
+                opacity: 0;
+                transition: all 0.3s ease;
+                border-bottom: 1px solid var(--border);
+            }
+            
+            .nav-links.active {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            
+            .nav-links a {
+                display: block;
+                padding: 15px;
+                width: 100%;
+                border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+            }
+            
+            .menu-toggle {
+                display: block;
+                background: none;
+                border: none;
+                color: #fff;
+                font-size: 20px;
+                cursor: pointer;
+            }
+            
+            .hero-title {
+                font-size: 28px;
+            }
+            
+            .gallery-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .product-image-container {
+                height: 350px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 15px;
+                align-items: flex-start;
+            }
+            
+            .admin-actions {
+                width: 100%;
+                flex-wrap: wrap;
+            }
+            
+            .admin-btn {
+                flex: 1;
+                min-width: 120px;
+                justify-content: center;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            .cart-modal {
+                width: 100%;
+                max-width: 350px;
+            }
+            
+            #floatingCartIcon {
+                bottom: 20px;
+                right: 20px;
+                width: 55px;
+                height: 55px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .category-filter {
+                gap: 8px;
+            }
+            
+            .category-btn {
+                padding: 6px 16px;
+                font-size: 13px;
+            }
+            
+            .product-image-container {
+                height: 300px;
+            }
+            
+            .about-stats, .admin-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .cart-modal {
+                width: 100%;
+                padding: 20px;
+            }
+        }
+    </style>
 </head>
 <body>
-    <!-- Header with Navigation -->
+    <!-- Header & Navigation -->
     <header class="header">
-        <a href="#" class="logo" data-page="home">
-            <i class="fas fa-eye"></i> Deepak Boutique
+        <a class="logo" data-page="shop">
+            DEEPAK <span>BOUTIQUE</span>
         </a>
-
-        <button class="menu-toggle">
+        
+        <button class="menu-toggle" id="menuToggle">
             <i class="fas fa-bars"></i>
         </button>
-
-        <ul class="nav-links">
-            <li><a href="#" class="active" data-page="home">HOME</a></li>
-            <li><a href="#" data-page="about">ABOUT</a></li>
-            <li><a href="#" data-page="contact">CONTACT</a></li>
+        
+        <ul class="nav-links" id="navLinks">
+            <li><a class="active" data-page="shop">SHOP</a></li>
+            <li><a data-page="about">ABOUT</a></li>
+            <li><a data-page="contact">CONTACT</a></li>
+            <li><a data-page="admin" id="adminLink">ADMIN</a></li>
         </ul>
     </header>
 
+    <!-- Floating Cart Icon -->
+    <div class="floating-cart-icon" id="floatingCartIcon">
+        <i class="fas fa-shopping-bag"></i>
+        <span class="floating-cart-count" id="floatingCartCount">0</span>
+    </div>
+
+    <!-- Cart Modal -->
+    <div class="cart-modal" id="cartModal">
+        <div class="cart-modal-header">
+            <h3 class="cart-modal-title">Your Shopping Bag</h3>
+            <button class="close-cart" id="closeCart">&times;</button>
+        </div>
+        
+        <div class="cart-modal-body" id="cartModalBody">
+            <!-- Cart items will be loaded here -->
+        </div>
+        
+        <div class="cart-modal-summary">
+            <div class="cart-modal-total">
+                <span>Total:</span>
+                <span>₹<span id="modalCartTotal">0.00</span></span>
+            </div>
+            <button class="cart-modal-checkout" id="modalCheckoutBtn" disabled>Proceed to Checkout</button>
+        </div>
+    </div>
+
     <!-- Main Content -->
     <main class="main-content">
-        <!-- Home Page -->
-        <section id="home-page" class="page active">
-            <!-- Category Filter -->
-            <div class="category-filter">
-                <button class="category-btn active" data-category="all">ALL</button>
-                <button class="category-btn" data-category="electronics">SUIT</button>
-                <button class="category-btn" data-category="fashion">SARARA</button>
-                <button class="category-btn" data-category="home">LEHGA</button>
-                <button class="category-btn" data-category="sports">SADI</button>
+        <!-- Shop Page (Default) -->
+        <section id="shop-page" class="page active">
+            <div class="hero-section">
+                <h1 class="hero-title">PREMIUM FASHION COLLECTION</h1>
+                <p class="hero-subtitle">Discover exquisite traditional and contemporary clothing crafted with precision and passion</p>
             </div>
-
-            <!-- Product Gallery - 5 per row, portrait images -->
-            <div class="gallery-grid">
-                <!-- Product 1 - Yoga Mat -->
-                <div class="product-item" data-category="sports">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/49888_7Main_bf164335-fe8e-4975-afe6-a9e1554ba45c.jpg?v=1761741189&width=1080" alt="Premium Yoga Mat" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Red Woven Design Silk Blend A-Line Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 2 - Smart Watch -->
-                <div class="product-item" data-category="electronics">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/51629_1.jpg?v=1767026133&width=1800" alt="Smart Watch Pro" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Black Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 3 - Sneakers -->
-                <div class="product-item" data-category="fashion">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/green-embroidered-silk-blend-straight-suit-set-with-dupatta-51786.jpg?v=1767025499&width=1800" alt="Urban Sneakers" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Green Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 4 - Desk Lamp -->
-                <div class="product-item" data-category="home">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/green-embroidered-chinon-straight-suit-set-with-dupatta-51833.jpg?v=1766940402&width=1800" alt="Minimalist Desk Lamp" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Green Embroidered Chinon Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 5 - Headphones -->
-                <div class="product-item" data-category="electronics">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/20231O.webp?v=1769084071&width=1080" alt="Noise-Cancelling Headphones" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">NOISE-CANCELLING HEADPHONES</h3>
-                    </div>
-                </div>
-
-                <!-- Product 6 - Backpack -->
-                <div class="product-item" data-category="fashion">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/34800H.webp?v=1769084386&width=1080" alt="Leather Backpack" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Pink Printed Cotton Straight Suit With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 7 - Coffee Maker -->
-                <div class="product-item" data-category="home">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/purple-embroidered-silk-blend-straight-suit-set-with-dupatta-51628.jpg?v=1767026459&width=1800" alt="Espresso Machine" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Purple Embroidered Silk Blend Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 8 - Water Bottle -->
-                <div class="product-item" data-category="sports">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/99695_8.webp?v=1769081938&width=1800" alt="Insulated Water Bottle" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Mustard Printed Cotton Blend Straight Suit Sets With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 9 - Camera -->
-                <div class="product-item" data-category="electronics">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/beige-woven-design-silk-straight-kurta-with-trouser-and-dupatta-libas-1.jpg?v=1760898173&width=1800" alt="Mirrorless Camera" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Beige Woven Design Silk Straight Kurta With Trouser & Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 10 - Sunglasses -->
-                <div class="product-item" data-category="fashion">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/99055O_8_d1faa92c-5e0c-4627-87e0-81d0af24c0a1.webp?v=1769081410&width=1800" alt="Designer Sunglasses" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Pink Printed Cotton Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 11 - Chair -->
-                <div class="product-item" data-category="home">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/400706_8Main_7f3e6cad-1e68-4e91-9763-76217fbfde38.jpg?v=1763545525&width=1800" alt="Modern Chair" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Blue Printed Cotton Straight Suit Set With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 12 - Basketball -->
-                <div class="product-item" data-category="sports">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/36610_e72557c9-9593-4128-8177-0c3cd47a1ad8.jpg?v=1755942406&width=1800" alt="Professional Basketball" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Blue Printed Cotton Straight Suit With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 13 - Watch -->
-                <div class="product-item" data-category="fashion">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/1_5b07da07-77c7-4199-b1f8-10b5e2c5c6fa.jpg?v=1755945066&width=1800" alt="Luxury Watch" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Blue Embroidered Silk Blend Straight Suit With Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 14 - Speaker -->
-                <div class="product-item" data-category="electronics">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/49278_8main.webp?v=1769080645&width=1800" alt="Wireless Speaker" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Magenta Woven Design Chanderi Silk A-Line Kurta With Trousers & Dupatta</h3>
-                    </div>
-                </div>
-
-                <!-- Product 15 - Perfume -->
-                <div class="product-item" data-category="fashion">
-                    <div class="product-image-container">
-                        <img src="https://www.libas.in/cdn/shop/files/99541O_8Main_d14a8702-ddce-4d29-b05d-fd810a578590.jpg?v=1755942545&width=1800" alt="Premium Perfume" class="product-image">
-                    </div>
-                    <div class="product-name-container">
-                        <h3 class="product-name">Rust Embroidered Cotton Blend Anarkali Suit Set With Dupatta</h3>
-                    </div>
-                </div>
+            
+            <div class="category-filter" id="categoryFilter">
+                <button class="category-btn active" data-category="all">ALL</button>
+                <button class="category-btn" data-category="suit">SUITS</button>
+                <button class="category-btn" data-category="saree">SAREES</button>
+                <button class="category-btn" data-category="lehenga">LEHENGAS</button>
+                <button class="category-btn" data-category="sadi">SADIS</button>
+                <button class="category-btn" data-category="kurta">KURTAS</button>
+            </div>
+            
+            <div class="gallery-grid" id="productGrid">
+                <!-- Products will be loaded here -->
             </div>
         </section>
 
         <!-- About Page -->
         <section id="about-page" class="page">
             <div class="about-content">
-                <h1 class="about-title">ABOUT US</h1>
+                <h1 class="hero-title">ABOUT DEEPAK BOUTIQUE</h1>
                 <p class="about-text">
-                    We are a Deepak Boutique-first company dedicated to showcasing products in their purest form.
-                    In a world saturated with descriptions, prices, and marketing messages, we believe
-                    in letting products speak for themselves through clean, focused Deepak Boutique presentation.
+                    Established with a vision to redefine traditional fashion, Deepak Boutique brings you 
+                    exquisite clothing that blends heritage craftsmanship with contemporary aesthetics.
                 </p>
                 <p class="about-text">
-                    Our philosophy is simple: remove all distractions and let the design, craftsmanship,
-                    and beauty of each product shine through. No descriptions. No prices. Just pure Deepak Boutique
-                    appreciation.
+                    Our journey began over a decade ago in the heart of Jalandhar, where we started 
+                    as a small family-run boutique. Today, we've grown into a premier fashion destination, 
+                    known for our attention to detail, quality fabrics, and timeless designs.
                 </p>
                 <p class="about-text">
-                    Founded by designers and photographers who were tired of cluttered e-commerce experiences,
-                    we've created a space where form and aesthetics take center stage.
+                    Every piece in our collection is carefully curated and crafted by skilled artisans 
+                    who have honed their craft over generations. We believe in sustainable fashion and 
+                    ethical practices, ensuring that every purchase supports traditional craftsmanship.
                 </p>
-
+                
                 <div class="about-stats">
                     <div class="stat-item">
-                        <span class="stat-number">500+</span>
-                        <span class="stat-label">PRODUCTS SHOWCASED</span>
+                        <span class="stat-number">1000+</span>
+                        <span class="stat-label">DESIGNS</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">3</span>
-                        <span class="stat-label">YEARS EXPERIENCE</span>
+                        <span class="stat-number">12+</span>
+                        <span class="stat-label">YEARS</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">50+</span>
-                        <span class="stat-label">BRANDS FEATURED</span>
+                        <span class="stat-number">75+</span>
+                        <span class="stat-label">ARTISANS</span>
                     </div>
                     <div class="stat-item">
-                        <span class="stat-number">100%</span>
-                        <span class="stat-label">Deepak Boutique FOCUS</span>
+                        <span class="stat-number">5000+</span>
+                        <span class="stat-label">CUSTOMERS</span>
                     </div>
                 </div>
             </div>
@@ -235,86 +1035,1064 @@
         <!-- Contact Page -->
         <section id="contact-page" class="page">
             <div class="contact-content">
-                <h1 class="contact-title">CONTACT US</h1>
-
-                <div class="contact-info">
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                <h1 class="hero-title">CONTACT US</h1>
+                
+                <div class="contact-container">
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-map-marker-alt"></i>
+                            </div>
+                            <div class="contact-detail">
+                                <strong>Our Store</strong><br>
+                                Mitha Bazar, Jalandhar<br>
+                                Punjab - 144001, India
+                            </div>
                         </div>
-                        <div class="contact-detail">
-                            Mitha Bazar Jalandhar<br>
-                            Punjab<br>
-                            104001, India
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-phone"></i>
+                            </div>
+                            <div class="contact-detail">
+                                <strong>Phone Number</strong><br>
+                                +91 8699522873<br>
+                                Mon-Sat: 10:00 AM - 8:00 PM
+                            </div>
+                        </div>
+                        
+                        <div class="contact-item">
+                            <div class="contact-icon">
+                                <i class="fas fa-envelope"></i>
+                            </div>
+                            <div class="contact-detail">
+                                <strong>Email Address</strong><br>
+                                info@deepakboutique.shop<br>
+                                orders@deepakboutique.shop
+                            </div>
                         </div>
                     </div>
+                    
+                    <form class="contact-form" id="contactForm">
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Your Name" id="contactName" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" class="form-input" placeholder="Your Email" id="contactEmail" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="text" class="form-input" placeholder="Subject" id="contactSubject" required>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea class="form-input" placeholder="Your Message" rows="5" id="contactMessage" required></textarea>
+                        </div>
+                        
+                        <button type="submit" class="submit-btn">Send Message</button>
+                    </form>
+                </div>
+            </div>
+        </section>
 
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
-                        </div>
-                        <div class="contact-detail">
-                            +91 8699522873<br>
-                            Mon-Fri, 9am-6pm EST
-                        </div>
-                    </div>
-
-                    <div class="contact-item">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
-                        </div>
-                        <div class="contact-detail">
-                            info@deepakboutique.shop<br>
-                            support@deepakboutique.shop
-                        </div>
+        <!-- Admin Panel -->
+        <section id="admin-page" class="page">
+            <div class="admin-container">
+                <div class="admin-header">
+                    <h1 class="admin-title">Admin Dashboard</h1>
+                    <div class="admin-actions">
+                        <button class="admin-btn primary" id="addProductBtn">
+                            <i class="fas fa-plus"></i> Add Product
+                        </button>
+                        <button class="admin-btn" id="viewProductsBtn">
+                            <i class="fas fa-list"></i> View Products
+                        </button>
+                        <button class="admin-btn" id="viewOrdersBtn">
+                            <i class="fas fa-shopping-cart"></i> View Orders
+                        </button>
+                        <button class="admin-logout" id="adminLogout">Logout</button>
                     </div>
                 </div>
-
-                <form class="contact-form">
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder="YOUR NAME" required>
+                
+                <div class="admin-stats">
+                    <div class="admin-stat">
+                        <div class="stat-number" id="totalOrders">0</div>
+                        <div class="stat-label">TOTAL ORDERS</div>
                     </div>
-
-                    <div class="form-group">
-                        <input type="email" class="form-input" placeholder="YOUR EMAIL" required>
+                    <div class="admin-stat">
+                        <div class="stat-number" id="totalRevenue">₹0</div>
+                        <div class="stat-label">TOTAL REVENUE</div>
                     </div>
-
-                    <div class="form-group">
-                        <input type="text" class="form-input" placeholder="SUBJECT" required>
+                    <div class="admin-stat">
+                        <div class="stat-number" id="totalProducts">0</div>
+                        <div class="stat-label">PRODUCTS</div>
                     </div>
-
-                    <div class="form-group">
-                        <textarea class="form-input" placeholder="YOUR MESSAGE" required></textarea>
+                    <div class="admin-stat">
+                        <div class="stat-number" id="totalCustomers">0</div>
+                        <div class="stat-label">CUSTOMERS</div>
                     </div>
-
-                    <button type="submit" class="submit-btn">SEND MESSAGE</button>
-                </form>
+                </div>
+                
+                <!-- Add/Edit Product Form -->
+                <div class="admin-section" id="productFormSection" style="display: none;">
+                    <h2 class="admin-section-title">
+                        <i class="fas fa-cube"></i>
+                        <span id="formTitle">Add New Product</span>
+                    </h2>
+                    
+                    <form id="productForm" class="product-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productName">Product Name *</label>
+                                <input type="text" id="productName" class="form-input" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productCategory">Category *</label>
+                                <select id="productCategory" class="form-input" required>
+                                    <option value="">Select Category</option>
+                                    <option value="suit">Suit</option>
+                                    <option value="saree">Saree</option>
+                                    <option value="lehenga">Lehenga</option>
+                                    <option value="sadi">Sadi</option>
+                                    <option value="kurta">Kurta</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="productPrice">Price (₹) *</label>
+                                <input type="number" id="productPrice" class="form-input" step="0.01" min="0" required>
+                            </div>
+                            
+                            <div class="form-group">
+                                <label for="productImage">Image URL *</label>
+                                <input type="url" id="productImage" class="form-input" required placeholder="https://example.com/image.jpg">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="productDescription">Description</label>
+                            <textarea id="productDescription" class="form-input" rows="4" placeholder="Describe the product features, material, etc."></textarea>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <input type="hidden" id="productId">
+                            <button type="button" class="admin-btn" id="cancelFormBtn">Cancel</button>
+                            <button type="submit" class="admin-btn primary" id="submitFormBtn">
+                                <i class="fas fa-save"></i> Save Product
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <!-- Products List -->
+                <div class="admin-section" id="productsListSection">
+                    <h2 class="admin-section-title">
+                        <i class="fas fa-list"></i>
+                        Products Management
+                    </h2>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Category</th>
+                                <th>Price</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="productsTableBody">
+                            <!-- Products will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Orders List -->
+                <div class="admin-section" id="ordersListSection" style="display: none;">
+                    <h2 class="admin-section-title">
+                        <i class="fas fa-shopping-cart"></i>
+                        Orders Management
+                    </h2>
+                    
+                    <table class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>Order ID</th>
+                                <th>Customer</th>
+                                <th>Date</th>
+                                <th>Total</th>
+                                <th>Status</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="ordersTableBody">
+                            <!-- Orders will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+                
+                <!-- Admin Login Info -->
+                <div class="admin-section">
+                    <h2 class="admin-section-title">
+                        <i class="fas fa-key"></i>
+                        Admin Access Information
+                    </h2>
+                    <p style="color: #aaa; margin-bottom: 15px;">Use the following credentials to access the admin panel:</p>
+                    <div style="background: rgba(255,107,139,0.1); padding: 15px; border-radius: 4px; font-size: 14px; color: #fff; border-left: 3px solid var(--accent);">
+                        Username: admin@deepakboutique.shop<br>
+                        Password: deepak@321
+                    </div>
+                </div>
             </div>
         </section>
     </main>
 
-    <!-- Fullscreen View -->
-    <div class="fullscreen-view">
-        <button class="close-fullscreen">
-            <i class="fas fa-times"></i>
-        </button>
-        <button class="nav-arrow prev">
-            <i class="fas fa-chevron-left"></i>
-        </button>
-        <div class="fullscreen-content">
-            <img src="" alt="Fullscreen Product" class="fullscreen-image">
-            <h3 class="fullscreen-name"></h3>
-        </div>
-        <button class="nav-arrow next">
-            <i class="fas fa-chevron-right"></i>
-        </button>
-    </div>
-
     <!-- Footer -->
     <footer class="footer">
-        Deepak Boutique PRODUCT GALLERY • 5 PRODUCTS PER ROW • PORTRAIT IMAGES • NO DESCRIPTIONS • NO PRICES
+        DEEPAK BOUTIQUE • PREMIUM CLOTHING • EST. 2012 • JALANDHAR, INDIA • ALL RIGHTS RESERVED
     </footer>
 
-    <script src="script.js"></script>
+    <!-- JavaScript -->
+    <script>
+        // ===== PRODUCT DATA =====
+        let products = JSON.parse(localStorage.getItem('products')) || [
+            {
+                id: 1,
+                name: "Red Woven Design Silk Blend A-Line Suit Set",
+                category: "suit",
+                price: 7499,
+                image: "https://www.libas.in/cdn/shop/files/49888_7Main_bf164335-fe8e-4975-afe6-a9e1554ba45c.jpg?v=1761741189&width=800",
+                description: "Elegant red silk blend suit with intricate woven design"
+            },
+            {
+                id: 2,
+                name: "Black Embroidered Silk Blend Straight Suit Set",
+                category: "suit",
+                price: 8499,
+                image: "https://www.libas.in/cdn/shop/files/51629_1.jpg?v=1767026133&width=800",
+                description: "Classic black suit with exquisite embroidery"
+            },
+            {
+                id: 3,
+                name: "Green Embroidered Silk Blend Straight Suit Set",
+                category: "suit",
+                price: 7999,
+                image: "https://www.libas.in/cdn/shop/files/green-embroidered-silk-blend-straight-suit-set-with-dupatta-51786.jpg?v=1767025499&width=800",
+                description: "Vibrant green silk suit with traditional embroidery"
+            },
+            {
+                id: 4,
+                name: "Green Embroidered Chinon Straight Suit Set",
+                category: "suit",
+                price: 9299,
+                image: "https://www.libas.in/cdn/shop/files/green-embroidered-chinon-straight-suit-set-with-dupatta-51833.jpg?v=1766940402&width=800",
+                description: "Luxury chinon silk suit with detailed embroidery"
+            },
+            {
+                id: 5,
+                name: "Purple Embroidered Silk Blend Suit Set",
+                category: "suit",
+                price: 7499,
+                image: "https://www.libas.in/cdn/shop/files/purple-embroidered-silk-blend-straight-suit-set-with-dupatta-51628.jpg?v=1767026459&width=800",
+                description: "Royal purple silk blend suit with embroidery"
+            },
+            {
+                id: 6,
+                name: "Pink Printed Cotton Straight Suit",
+                category: "sadi",
+                price: 4999,
+                image: "https://www.libas.in/cdn/shop/files/34800H.webp?v=1769084386&width=800",
+                description: "Casual pink cotton suit with modern print"
+            },
+            {
+                id: 7,
+                name: "Mustard Printed Cotton Blend Suit Set",
+                category: "sadi",
+                price: 5499,
+                image: "https://www.libas.in/cdn/shop/files/99695_8.webp?v=1769081938&width=800",
+                description: "Mustard colored suit with traditional prints"
+            },
+            {
+                id: 8,
+                name: "Beige Woven Design Silk Kurta Set",
+                category: "kurta",
+                price: 9999,
+                image: "https://www.libas.in/cdn/shop/files/beige-woven-design-silk-straight-kurta-with-trouser-and-dupatta-libas-1.jpg?v=1760898173&width=800",
+                description: "Elegant beige silk kurta with trousers"
+            },
+            {
+                id: 9,
+                name: "Pink Printed Cotton Suit Set",
+                category: "sadi",
+                price: 4599,
+                image: "https://www.libas.in/cdn/shop/files/99055O_8_d1faa92c-5e0c-4627-87e0-81d0af24c0a1.webp?v=1769081410&width=800",
+                description: "Light pink cotton suit with floral prints"
+            },
+            {
+                id: 10,
+                name: "Blue Printed Cotton Suit Set",
+                category: "sadi",
+                price: 4999,
+                image: "https://www.libas.in/cdn/shop/files/400706_8Main_7f3e6cad-1e68-4e91-9763-76217fbfde38.jpg?v=1763545525&width=800",
+                description: "Navy blue cotton suit with geometric prints"
+            },
+            {
+                id: 11,
+                name: "Designer Silk Saree with Zari Work",
+                category: "saree",
+                price: 12499,
+                image: "https://images.unsplash.com/photo-1595777457583-95e059d581b8?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Elegant silk saree with intricate zari embroidery"
+            },
+            {
+                id: 12,
+                name: "Bridal Lehenga with Heavy Embroidery",
+                category: "lehenga",
+                price: 24999,
+                image: "https://images.unsplash.com/photo-1539008835657-9e8e9680c956?ixlib=rb-4.0.3&auto=format&fit=crop&w=800&q=80",
+                description: "Exquisite bridal lehenga with heavy embroidery"
+            }
+        ];
+
+        // ===== APP STATE =====
+        let cart = JSON.parse(localStorage.getItem('cart')) || [];
+        let currentCategory = 'all';
+        let isEditingProduct = false;
+
+        // ===== DOM ELEMENTS =====
+        const productGrid = document.getElementById('productGrid');
+        const categoryFilter = document.getElementById('categoryFilter');
+        const navLinks = document.querySelectorAll('.nav-links a');
+        const menuToggle = document.getElementById('menuToggle');
+        const navMenu = document.getElementById('navLinks');
+        const pages = document.querySelectorAll('.page');
+        const contactForm = document.getElementById('contactForm');
+        const floatingCartIcon = document.getElementById('floatingCartIcon');
+        const floatingCartCount = document.getElementById('floatingCartCount');
+        const cartModal = document.getElementById('cartModal');
+        const closeCart = document.getElementById('closeCart');
+        const cartModalBody = document.getElementById('cartModalBody');
+        const modalCartTotal = document.getElementById('modalCartTotal');
+        const modalCheckoutBtn = document.getElementById('modalCheckoutBtn');
+
+        // Contact Form Elements
+        const contactName = document.getElementById('contactName');
+        const contactEmail = document.getElementById('contactEmail');
+        const contactSubject = document.getElementById('contactSubject');
+        const contactMessage = document.getElementById('contactMessage');
+
+        // Admin Elements
+        const adminLink = document.getElementById('adminLink');
+        const adminLogout = document.getElementById('adminLogout');
+        const addProductBtn = document.getElementById('addProductBtn');
+        const viewProductsBtn = document.getElementById('viewProductsBtn');
+        const viewOrdersBtn = document.getElementById('viewOrdersBtn');
+        const productFormSection = document.getElementById('productFormSection');
+        const productsListSection = document.getElementById('productsListSection');
+        const ordersListSection = document.getElementById('ordersListSection');
+        const productForm = document.getElementById('productForm');
+        const formTitle = document.getElementById('formTitle');
+        const cancelFormBtn = document.getElementById('cancelFormBtn');
+        const submitFormBtn = document.getElementById('submitFormBtn');
+        const productsTableBody = document.getElementById('productsTableBody');
+        const ordersTableBody = document.getElementById('ordersTableBody');
+        
+        // Product Form Elements
+        const productIdInput = document.getElementById('productId');
+        const productNameInput = document.getElementById('productName');
+        const productCategoryInput = document.getElementById('productCategory');
+        const productPriceInput = document.getElementById('productPrice');
+        const productImageInput = document.getElementById('productImage');
+        const productDescriptionInput = document.getElementById('productDescription');
+
+        // ===== INITIALIZATION =====
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeApp();
+            saveProductsToStorage();
+        });
+
+        function initializeApp() {
+            renderProducts();
+            updateCartCount();
+            setupEventListeners();
+            updateButtonStates();
+            updateAdminStats();
+            renderProductsTable();
+        }
+
+        function saveProductsToStorage() {
+            if (!localStorage.getItem('products')) {
+                localStorage.setItem('products', JSON.stringify(products));
+            }
+        }
+
+        function setupEventListeners() {
+            // Mobile menu toggle
+            menuToggle.addEventListener('click', toggleMobileMenu);
+            
+            // Navigation links
+            navLinks.forEach(link => {
+                link.addEventListener('click', handleNavigation);
+            });
+            
+            // Contact form
+            contactForm.addEventListener('submit', handleContactSubmit);
+            
+            // Cart functionality
+            floatingCartIcon.addEventListener('click', openCartModal);
+            closeCart.addEventListener('click', closeCartModal);
+            
+            // Admin functionality
+            adminLogout.addEventListener('click', handleAdminLogout);
+            addProductBtn.addEventListener('click', showAddProductForm);
+            viewProductsBtn.addEventListener('click', showProductsList);
+            viewOrdersBtn.addEventListener('click', showOrdersList);
+            cancelFormBtn.addEventListener('click', cancelProductForm);
+            productForm.addEventListener('submit', handleProductFormSubmit);
+            
+            // Category filters
+            setupCategoryFilters();
+        }
+
+        // ===== EMAIL FUNCTIONALITY =====
+        async function sendEmail(formData) {
+            try {
+                // Using EmailJS (you need to set this up with your own account)
+                // For demo purposes, we'll simulate email sending
+                
+                const emailData = {
+                    to_email: 'info@deepakboutique.shop',
+                    from_name: formData.name,
+                    from_email: formData.email,
+                    subject: formData.subject,
+                    message: formData.message
+                };
+                
+                // Simulate API call
+                await new Promise(resolve => setTimeout(resolve, 1000));
+                
+                // In a real implementation, you would use:
+                // emailjs.send('service_id', 'template_id', emailData, 'public_key')
+                
+                return { success: true, message: 'Email sent successfully!' };
+            } catch (error) {
+                console.error('Error sending email:', error);
+                return { success: false, message: 'Failed to send email. Please try again later.' };
+            }
+        }
+
+        // ===== PRODUCT MANAGEMENT FUNCTIONS =====
+        function showAddProductForm() {
+            resetProductForm();
+            formTitle.textContent = 'Add New Product';
+            productFormSection.style.display = 'block';
+            productsListSection.style.display = 'none';
+            ordersListSection.style.display = 'none';
+            isEditingProduct = false;
+        }
+
+        function showEditProductForm(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+            
+            // Fill form with product data
+            productIdInput.value = product.id;
+            productNameInput.value = product.name;
+            productCategoryInput.value = product.category;
+            productPriceInput.value = product.price;
+            productImageInput.value = product.image;
+            productDescriptionInput.value = product.description || '';
+            
+            // Show form
+            formTitle.textContent = 'Edit Product';
+            productFormSection.style.display = 'block';
+            productsListSection.style.display = 'none';
+            ordersListSection.style.display = 'none';
+            isEditingProduct = true;
+            
+            // Scroll to form
+            productFormSection.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function cancelProductForm() {
+            productFormSection.style.display = 'none';
+            productsListSection.style.display = 'block';
+            resetProductForm();
+        }
+
+        function resetProductForm() {
+            productForm.reset();
+            productIdInput.value = '';
+            isEditingProduct = false;
+        }
+
+        function handleProductFormSubmit(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const productData = {
+                name: productNameInput.value.trim(),
+                category: productCategoryInput.value,
+                price: parseFloat(productPriceInput.value),
+                image: productImageInput.value.trim(),
+                description: productDescriptionInput.value.trim()
+            };
+            
+            // Validation
+            if (!productData.name || !productData.category || !productData.price || !productData.image) {
+                showNotification('Please fill in all required fields!', 'error');
+                return;
+            }
+            
+            if (isEditingProduct) {
+                // Update existing product
+                const productId = parseInt(productIdInput.value);
+                updateProduct(productId, productData);
+            } else {
+                // Add new product
+                addNewProduct(productData);
+            }
+        }
+
+        function addNewProduct(productData) {
+            // Generate new ID
+            const newId = products.length > 0 ? Math.max(...products.map(p => p.id)) + 1 : 1;
+            
+            // Create product object
+            const newProduct = {
+                id: newId,
+                ...productData
+            };
+            
+            // Add to products array
+            products.push(newProduct);
+            
+            // Save to localStorage
+            saveProducts();
+            
+            // Update UI
+            renderProducts();
+            renderProductsTable();
+            updateAdminStats();
+            
+            // Show success message
+            showNotification('Product added successfully!');
+            
+            // Reset form and show products list
+            cancelProductForm();
+        }
+
+        function updateProduct(productId, productData) {
+            // Find product index
+            const productIndex = products.findIndex(p => p.id === productId);
+            
+            if (productIndex === -1) {
+                showNotification('Product not found!', 'error');
+                return;
+            }
+            
+            // Update product
+            products[productIndex] = {
+                id: productId,
+                ...productData
+            };
+            
+            // Save to localStorage
+            saveProducts();
+            
+            // Update UI
+            renderProducts();
+            renderProductsTable();
+            
+            // Show success message
+            showNotification('Product updated successfully!');
+            
+            // Reset form and show products list
+            cancelProductForm();
+        }
+
+        function deleteProduct(productId) {
+            if (!confirm('Are you sure you want to delete this product?')) {
+                return;
+            }
+            
+            // Remove product from array
+            products = products.filter(p => p.id !== productId);
+            
+            // Save to localStorage
+            saveProducts();
+            
+            // Update UI
+            renderProducts();
+            renderProductsTable();
+            updateAdminStats();
+            
+            // Show success message
+            showNotification('Product deleted successfully!');
+        }
+
+        function saveProducts() {
+            localStorage.setItem('products', JSON.stringify(products));
+        }
+
+        function renderProductsTable() {
+            if (products.length === 0) {
+                productsTableBody.innerHTML = `
+                    <tr>
+                        <td colspan="4" style="text-align: center; padding: 40px; color: #666;">
+                            <i class="fas fa-box-open" style="font-size: 36px; margin-bottom: 15px; display: block;"></i>
+                            <p>No products found</p>
+                            <p style="font-size: 12px; margin-top: 10px;">Add your first product using the "Add Product" button</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+            
+            let html = '';
+            
+            products.forEach(product => {
+                html += `
+                    <tr>
+                        <td>${product.name}</td>
+                        <td>${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</td>
+                        <td>₹${product.price.toLocaleString('en-IN')}</td>
+                        <td>
+                            <div class="table-actions">
+                                <button class="action-btn edit" onclick="window.editProduct(${product.id})" title="Edit">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button class="action-btn delete" onclick="window.deleteProduct(${product.id})" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            productsTableBody.innerHTML = html;
+        }
+
+        function showProductsList() {
+            productFormSection.style.display = 'none';
+            productsListSection.style.display = 'block';
+            ordersListSection.style.display = 'none';
+            renderProductsTable();
+        }
+
+        function showOrdersList() {
+            productFormSection.style.display = 'none';
+            productsListSection.style.display = 'none';
+            ordersListSection.style.display = 'block';
+            renderOrdersTable();
+        }
+
+        function renderOrdersTable() {
+            // For demo purposes, create some sample orders
+            const sampleOrders = [
+                { id: 'ORD-001', customer: 'John Doe', date: '2024-01-15', total: 20997, status: 'completed' },
+                { id: 'ORD-002', customer: 'Jane Smith', date: '2024-01-14', total: 9999, status: 'processing' },
+                { id: 'ORD-003', customer: 'Bob Johnson', date: '2024-01-13', total: 7499, status: 'pending' },
+                { id: 'ORD-004', customer: 'Alice Brown', date: '2024-01-12', total: 24999, status: 'completed' },
+                { id: 'ORD-005', customer: 'Charlie Wilson', date: '2024-01-11', total: 5499, status: 'cancelled' }
+            ];
+            
+            let html = '';
+            
+            sampleOrders.forEach(order => {
+                const statusClass = order.status === 'completed' ? 'completed' : 
+                                  order.status === 'processing' ? 'processing' : 
+                                  order.status === 'pending' ? 'pending' : 'cancelled';
+                
+                html += `
+                    <tr>
+                        <td>${order.id}</td>
+                        <td>${order.customer}</td>
+                        <td>${order.date}</td>
+                        <td>₹${order.total.toLocaleString('en-IN')}</td>
+                        <td><span style="color: ${statusClass === 'completed' ? '#51cf66' : statusClass === 'processing' ? '#4dabf7' : statusClass === 'pending' ? '#ffc107' : '#ff6b8b'}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
+                        <td>
+                            <button class="action-btn view" onclick="window.viewOrder('${order.id}')" title="View Details">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `;
+            });
+            
+            ordersTableBody.innerHTML = html;
+        }
+
+        // ===== RENDER FUNCTIONS =====
+        function renderProducts() {
+            const filteredProducts = currentCategory === 'all' 
+                ? products 
+                : products.filter(p => p.category === currentCategory);
+            
+            if (filteredProducts.length === 0) {
+                productGrid.innerHTML = `
+                    <div style="grid-column: 1 / -1; text-align: center; padding: 60px 20px; color: #666;">
+                        <i class="fas fa-box-open" style="font-size: 36px; margin-bottom: 15px;"></i>
+                        <h3 style="font-weight: 300; margin-bottom: 10px;">No products found</h3>
+                        <p>Try selecting a different category</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            productGrid.innerHTML = filteredProducts.map(product => `
+                <div class="product-item" data-id="${product.id}" data-category="${product.category}">
+                    <div class="product-image-container">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy"
+                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMyMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxNDE0MTQiLz48dGV4dCB4PSIxNjAiIHk9IjIwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5Qcm9kdWN0IEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
+                        <div class="product-name">${product.name}</div>
+                        <div class="product-price">₹${product.price.toLocaleString('en-IN')}</div>
+                        <button class="add-to-cart-btn" data-id="${product.id}">ADD TO BAG</button>
+                    </div>
+                </div>
+            `).join('');
+            
+            attachProductEvents();
+        }
+
+        function attachProductEvents() {
+            // Add to cart buttons
+            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    const productId = parseInt(btn.dataset.id);
+                    addToCart(productId);
+                });
+            });
+        }
+
+        // ===== CART FUNCTIONS =====
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (!product) return;
+
+            const existingItem = cart.find(item => item.id === productId);
+
+            if (existingItem) {
+                existingItem.quantity += 1;
+            } else {
+                cart.push({
+                    id: product.id,
+                    name: product.name,
+                    price: product.price,
+                    image: product.image,
+                    quantity: 1
+                });
+            }
+
+            updateLocalStorage();
+            updateCartCount();
+            renderCartModal();
+            updateButtonStates();
+            showNotification(`${product.name} added to bag!`);
+        }
+
+        function updateCartQuantity(productId, change, setQuantity = null) {
+            const itemIndex = cart.findIndex(item => item.id === productId);
+            if (itemIndex === -1) return;
+
+            if (setQuantity !== null) {
+                cart[itemIndex].quantity = parseInt(setQuantity);
+            } else {
+                cart[itemIndex].quantity += change;
+            }
+
+            if (cart[itemIndex].quantity < 1) {
+                cart.splice(itemIndex, 1);
+            }
+
+            updateLocalStorage();
+            updateCartCount();
+            renderCartModal();
+            updateButtonStates();
+        }
+
+        function removeFromCart(productId) {
+            cart = cart.filter(item => item.id !== productId);
+            updateLocalStorage();
+            updateCartCount();
+            renderCartModal();
+            updateButtonStates();
+        }
+
+        function updateLocalStorage() {
+            localStorage.setItem('cart', JSON.stringify(cart));
+        }
+
+        function updateCartCount() {
+            const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
+            floatingCartCount.textContent = totalItems;
+        }
+
+        function renderCartModal() {
+            if (cart.length === 0) {
+                cartModalBody.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-shopping-bag"></i>
+                        <p>Your bag is empty</p>
+                        <p style="font-size: 12px; margin-top: 10px;">Add some items to get started</p>
+                    </div>
+                `;
+                modalCartTotal.textContent = '0';
+                modalCheckoutBtn.disabled = true;
+                return;
+            }
+
+            let html = '';
+            let total = 0;
+
+            cart.forEach(item => {
+                const itemTotal = item.price * item.quantity;
+                total += itemTotal;
+
+                html += `
+                    <div class="cart-modal-item">
+                        <img src="${item.image}" alt="${item.name}" class="cart-modal-item-image">
+                        <div class="cart-modal-item-details">
+                            <div class="cart-modal-item-name">${item.name}</div>
+                            <div class="cart-modal-item-price">₹${item.price.toLocaleString('en-IN')}</div>
+                            <div class="cart-modal-item-actions">
+                                <button class="cart-modal-quantity-btn" onclick="window.cartUpdateQuantity(${item.id}, -1)">-</button>
+                                <input type="number" class="cart-modal-quantity-input" value="${item.quantity}" min="1" 
+                                       onchange="window.cartUpdateQuantity(${item.id}, 0, this.value)">
+                                <button class="cart-modal-quantity-btn" onclick="window.cartUpdateQuantity(${item.id}, 1)">+</button>
+                                <button class="cart-modal-remove" onclick="window.cartRemoveItem(${item.id})">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            cartModalBody.innerHTML = html;
+            modalCartTotal.textContent = total.toLocaleString('en-IN');
+            modalCheckoutBtn.disabled = false;
+        }
+
+        function openCartModal() {
+            cartModal.classList.add('active');
+            renderCartModal();
+        }
+
+        function closeCartModal() {
+            cartModal.classList.remove('active');
+        }
+
+        // ===== EVENT HANDLERS =====
+        function toggleMobileMenu() {
+            navMenu.classList.toggle('active');
+        }
+
+        function handleNavigation(e) {
+            e.preventDefault();
+            const pageId = e.target.getAttribute('data-page') + '-page';
+
+            // Update active navigation
+            navLinks.forEach(link => link.classList.remove('active'));
+            e.target.classList.add('active');
+
+            // Close mobile menu
+            navMenu.classList.remove('active');
+
+            // Show selected page
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                }
+            });
+
+            // Special handling for admin page
+            if (pageId === 'admin-page') {
+                const password = prompt('Enter admin password:');
+                if (password !== 'deepak@321') {
+                    alert('Incorrect password. Redirecting to shop.');
+                    navLinks[0].click();
+                    return;
+                }
+                updateAdminStats();
+                showProductsList(); // Default to products list
+            }
+        }
+
+        async function handleContactSubmit(e) {
+            e.preventDefault();
+            
+            // Get form data
+            const formData = {
+                name: contactName.value.trim(),
+                email: contactEmail.value.trim(),
+                subject: contactSubject.value.trim(),
+                message: contactMessage.value.trim()
+            };
+            
+            // Validate form
+            if (!formData.name || !formData.email || !formData.subject || !formData.message) {
+                showNotification('Please fill in all fields!', 'error');
+                return;
+            }
+            
+            // Validate email
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(formData.email)) {
+                showNotification('Please enter a valid email address!', 'error');
+                return;
+            }
+            
+            // Show loading state
+            const submitBtn = e.target.querySelector('.submit-btn');
+            const originalText = submitBtn.textContent;
+            submitBtn.textContent = 'Sending...';
+            submitBtn.disabled = true;
+            
+            try {
+                // Send email
+                const result = await sendEmail(formData);
+                
+                if (result.success) {
+                    // Show success message
+                    showNotification('Message sent successfully! We will respond within 24 hours.');
+                    
+                    // Reset form
+                    contactForm.reset();
+                } else {
+                    showNotification(result.message, 'error');
+                }
+            } catch (error) {
+                showNotification('Failed to send message. Please try again later.', 'error');
+            } finally {
+                // Restore button state
+                submitBtn.textContent = originalText;
+                submitBtn.disabled = false;
+            }
+        }
+
+        function handleAdminLogout() {
+            navLinks[0].click();
+        }
+
+        function setupCategoryFilters() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    // Update active button
+                    categoryButtons.forEach(b => {
+                        if (b.closest('.category-filter') === this.closest('.category-filter')) {
+                            b.classList.remove('active');
+                        }
+                    });
+                    this.classList.add('active');
+                    
+                    // Update category and render
+                    currentCategory = this.dataset.category;
+                    renderProducts();
+                });
+            });
+        }
+
+        // ===== UTILITY FUNCTIONS =====
+        function updateButtonStates() {
+            const hasItems = cart.length > 0;
+            modalCheckoutBtn.disabled = !hasItems;
+        }
+
+        function updateAdminStats() {
+            document.getElementById('totalOrders').textContent = Math.floor(Math.random() * 100) + 50;
+            document.getElementById('totalRevenue').textContent = '₹' + (Math.floor(Math.random() * 5000000) + 1000000).toLocaleString('en-IN');
+            document.getElementById('totalProducts').textContent = products.length;
+            document.getElementById('totalCustomers').textContent = Math.floor(Math.random() * 500) + 200;
+        }
+
+        function showNotification(message, type = 'success') {
+            // Remove existing notification
+            const existingNotification = document.querySelector('.notification');
+            if (existingNotification) {
+                existingNotification.remove();
+            }
+            
+            // Create new notification
+            const notification = document.createElement('div');
+            notification.className = 'notification';
+            notification.innerHTML = `
+                <i class="fas fa-${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>${message}</span>
+            `;
+            
+            document.body.appendChild(notification);
+            
+            // Auto remove after 3 seconds
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+
+        // ===== GLOBAL FUNCTIONS FOR INLINE EVENT HANDLERS =====
+        window.cartUpdateQuantity = function(productId, change, setQuantity = null) {
+            updateCartQuantity(productId, change, setQuantity);
+        };
+
+        window.cartRemoveItem = function(productId) {
+            removeFromCart(productId);
+        };
+
+        window.editProduct = function(productId) {
+            showEditProductForm(productId);
+        };
+
+        window.deleteProduct = function(productId) {
+            deleteProduct(productId);
+        };
+
+        window.viewOrder = function(orderId) {
+            alert(`Order Details:\n\nOrder ID: ${orderId}\nCustomer: Sample Customer\nDate: 2024-01-15\nTotal: ₹20,997\nStatus: Completed\n\nThis is a demo order. In a real application, this would show detailed order information.`);
+        };
+
+        // Checkout function for cart modal
+        modalCheckoutBtn.addEventListener('click', function() {
+            const total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            // Create order
+            const orderId = 'ORD-' + Math.floor(1000 + Math.random() * 9000);
+            const order = {
+                id: orderId,
+                items: [...cart],
+                total: total,
+                date: new Date().toISOString().split('T')[0],
+                status: 'completed'
+            };
+            
+            alert(`Thank you for your order!\n\nOrder ID: ${orderId}\nTotal: ₹${total.toLocaleString('en-IN')}\n\nThis is a demo. In a real application, this would proceed to checkout.`);
+            
+            // Clear cart after successful order
+            cart = [];
+            updateLocalStorage();
+            updateCartCount();
+            renderCartModal();
+            updateButtonStates();
+            closeCartModal();
+            
+            // Show success message
+            showNotification(`Order #${orderId} placed successfully!`);
+            
+            // Update admin stats
+            updateAdminStats();
+        });
+
+        // Initialize the app
+        initializeApp();
+    </script>
 </body>
 </html>
