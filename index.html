@@ -917,6 +917,17 @@
             display: none !important;
         }
         
+        /* ===== MOBILE MENU TOGGLE ===== */
+        .menu-toggle {
+            display: none;
+            background: none;
+            border: none;
+            color: #fff;
+            font-size: 20px;
+            cursor: pointer;
+            padding: 5px;
+        }
+        
         /* ===== RESPONSIVE DESIGN ===== */
         @media (max-width: 768px) {
             .header {
@@ -927,24 +938,32 @@
                 font-size: 18px;
             }
             
+            .menu-toggle {
+                display: block;
+            }
+            
             .nav-links {
                 position: fixed;
                 top: 60px;
                 left: 0;
                 width: 100%;
-                background: rgba(10, 10, 10, 0.95);
+                background: rgba(10, 10, 10, 0.98);
+                backdrop-filter: blur(10px);
                 flex-direction: column;
                 padding: 20px;
                 gap: 0;
                 transform: translateY(-100%);
                 opacity: 0;
+                visibility: hidden;
                 transition: all 0.3s ease;
                 border-bottom: 1px solid var(--border);
+                z-index: 100;
             }
             
-            .nav-links.active {
+            .nav-links.show {
                 transform: translateY(0);
                 opacity: 1;
+                visibility: visible;
             }
             
             .nav-links a {
@@ -952,19 +971,24 @@
                 padding: 15px;
                 width: 100%;
                 border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+                font-size: 16px;
             }
             
-            .menu-toggle {
-                display: block;
-                background: none;
-                border: none;
-                color: #fff;
-                font-size: 20px;
-                cursor: pointer;
+            .nav-links a:last-child {
+                border-bottom: none;
             }
             
             .hero-title {
                 font-size: 28px;
+            }
+            
+            .hero-subtitle {
+                font-size: 14px;
+                padding: 0 10px;
+            }
+            
+            .main-content {
+                padding: 80px 20px 40px;
             }
             
             .gallery-grid {
@@ -1030,33 +1054,71 @@
                 height: 40px;
                 font-size: 24px;
             }
-        }
-        
-        @media (max-width: 480px) {
-            .gallery-grid {
-                grid-template-columns: 1fr;
-            }
             
             .category-filter {
+                padding: 10px 5px;
                 gap: 8px;
             }
             
             .category-btn {
-                padding: 6px 16px;
+                padding: 8px 16px;
                 font-size: 13px;
-            }
-            
-            .product-image-container {
-                height: 300px;
             }
             
             .about-stats, .admin-stats {
                 grid-template-columns: repeat(2, 1fr);
             }
             
+            .contact-container {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+            
+            .contact-item {
+                padding: 15px;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .gallery-grid {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
+            .product-image-container {
+                height: 300px;
+            }
+            
+            .product-name {
+                font-size: 15px;
+                height: auto;
+            }
+            
+            .category-filter {
+                gap: 5px;
+            }
+            
+            .category-btn {
+                padding: 6px 12px;
+                font-size: 12px;
+            }
+            
+            .hero-title {
+                font-size: 24px;
+            }
+            
+            .hero-subtitle {
+                font-size: 13px;
+            }
+            
+            .about-stats, .admin-stats {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+            
             .cart-modal {
                 width: 100%;
-                padding: 20px;
+                padding: 15px;
             }
             
             .modal-image-info {
@@ -1069,6 +1131,20 @@
             
             .modal-product-price {
                 font-size: 14px;
+            }
+            
+            .admin-header {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .admin-actions {
+                flex-direction: column;
+            }
+            
+            .admin-btn {
+                width: 100%;
+                justify-content: center;
             }
         }
     </style>
@@ -1589,7 +1665,6 @@
         // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
-            saveProductsToStorage();
         });
 
         function initializeApp() {
@@ -1601,19 +1676,26 @@
             renderProductsTable();
         }
 
-        function saveProductsToStorage() {
-            if (!localStorage.getItem('products')) {
-                localStorage.setItem('products', JSON.stringify(products));
-            }
-        }
-
         function setupEventListeners() {
             // Mobile menu toggle
             menuToggle.addEventListener('click', toggleMobileMenu);
             
+            // Close mobile menu when clicking outside
+            document.addEventListener('click', function(e) {
+                if (!e.target.closest('.header') && navMenu.classList.contains('show')) {
+                    navMenu.classList.remove('show');
+                }
+            });
+            
             // Navigation links
-            navLinks.forEach(link => {
+            document.querySelectorAll('.nav-links a').forEach(link => {
                 link.addEventListener('click', handleNavigation);
+            });
+            
+            // Logo click
+            document.querySelector('.logo').addEventListener('click', function(e) {
+                e.preventDefault();
+                document.querySelector('.nav-links a[data-page="shop"]').click();
             });
             
             // Contact form
@@ -1622,6 +1704,13 @@
             // Cart functionality
             floatingCartIcon.addEventListener('click', openCartModal);
             closeCart.addEventListener('click', closeCartModal);
+            
+            // Close cart when clicking outside
+            document.addEventListener('click', function(e) {
+                if (e.target === cartModal) {
+                    closeCartModal();
+                }
+            });
             
             // Image Modal functionality
             closeModal.addEventListener('click', closeImageModal);
@@ -1648,6 +1737,96 @@
             
             // Keyboard navigation for image modal
             document.addEventListener('keydown', handleKeyboardNavigation);
+            
+            // Add to cart button events (delegated)
+            document.addEventListener('click', function(e) {
+                if (e.target.classList.contains('add-to-cart-btn')) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    const productId = parseInt(e.target.dataset.id);
+                    if (productId) addToCart(productId);
+                }
+                
+                // Category filter buttons
+                if (e.target.classList.contains('category-btn')) {
+                    e.preventDefault();
+                    const category = e.target.dataset.category;
+                    if (category) {
+                        filterProducts(category, e.target);
+                    }
+                }
+            });
+        }
+
+        function toggleMobileMenu() {
+            navMenu.classList.toggle('show');
+        }
+
+        function handleNavigation(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            const pageId = e.target.getAttribute('data-page') + '-page';
+            
+            // Close mobile menu
+            navMenu.classList.remove('show');
+            
+            // Update active navigation
+            document.querySelectorAll('.nav-links a').forEach(link => {
+                link.classList.remove('active');
+            });
+            e.target.classList.add('active');
+            
+            // Show selected page
+            pages.forEach(page => {
+                page.classList.remove('active');
+                if (page.id === pageId) {
+                    page.classList.add('active');
+                }
+            });
+            
+            // Special handling for admin page
+            if (pageId === 'admin-page') {
+                const password = prompt('Enter admin password:');
+                if (password !== 'deepak@321') {
+                    alert('Incorrect password. Redirecting to shop.');
+                    document.querySelector('.nav-links a[data-page="shop"]').click();
+                    return;
+                }
+                updateAdminStats();
+                showProductsList();
+            }
+        }
+
+        function setupCategoryFilters() {
+            const categoryButtons = document.querySelectorAll('.category-btn');
+            categoryButtons.forEach(btn => {
+                btn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    
+                    // Update active button
+                    categoryButtons.forEach(b => {
+                        b.classList.remove('active');
+                    });
+                    this.classList.add('active');
+                    
+                    // Update category and render
+                    currentCategory = this.dataset.category;
+                    renderProducts();
+                });
+            });
+        }
+
+        function filterProducts(category, button) {
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            button.classList.add('active');
+            
+            currentCategory = category;
+            renderProducts();
         }
 
         // ===== IMAGE MODAL FUNCTIONS =====
@@ -1719,22 +1898,8 @@
         // ===== EMAIL FUNCTIONALITY =====
         async function sendEmail(formData) {
             try {
-                // Using EmailJS (you need to set this up with your own account)
-                // For demo purposes, we'll simulate email sending
-                
-                const emailData = {
-                    to_email: 'info@deepakboutique.shop',
-                    from_name: formData.name,
-                    from_email: formData.email,
-                    subject: formData.subject,
-                    message: formData.message
-                };
-                
                 // Simulate API call
                 await new Promise(resolve => setTimeout(resolve, 1000));
-                
-                // In a real implementation, you would use:
-                // emailjs.send('service_id', 'template_id', emailData, 'public_key')
                 
                 return { success: true, message: 'Email sent successfully!' };
             } catch (error) {
@@ -1898,6 +2063,8 @@
         }
 
         function renderProductsTable() {
+            if (!productsTableBody) return;
+            
             if (products.length === 0) {
                 productsTableBody.innerHTML = `
                     <tr>
@@ -1921,10 +2088,10 @@
                         <td>₹${product.price.toLocaleString('en-IN')}</td>
                         <td>
                             <div class="table-actions">
-                                <button class="action-btn edit" onclick="window.editProduct(${product.id})" title="Edit">
+                                <button class="action-btn edit" onclick="editProduct(${product.id})" title="Edit">
                                     <i class="fas fa-edit"></i>
                                 </button>
-                                <button class="action-btn delete" onclick="window.deleteProduct(${product.id})" title="Delete">
+                                <button class="action-btn delete" onclick="deleteProduct(${product.id})" title="Delete">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -1951,6 +2118,8 @@
         }
 
         function renderOrdersTable() {
+            if (!ordersTableBody) return;
+            
             // For demo purposes, create some sample orders
             const sampleOrders = [
                 { id: 'ORD-001', customer: 'John Doe', date: '2024-01-15', total: 20997, status: 'completed' },
@@ -1975,7 +2144,7 @@
                         <td>₹${order.total.toLocaleString('en-IN')}</td>
                         <td><span style="color: ${statusClass === 'completed' ? '#51cf66' : statusClass === 'processing' ? '#4dabf7' : statusClass === 'pending' ? '#ffc107' : '#ff6b8b'}">${order.status.charAt(0).toUpperCase() + order.status.slice(1)}</span></td>
                         <td>
-                            <button class="action-btn view" onclick="window.viewOrder('${order.id}')" title="View Details">
+                            <button class="action-btn view" onclick="viewOrder('${order.id}')" title="View Details">
                                 <i class="fas fa-eye"></i>
                             </button>
                         </td>
@@ -1988,6 +2157,8 @@
 
         // ===== RENDER FUNCTIONS =====
         function renderProducts() {
+            if (!productGrid) return;
+            
             filteredProducts = currentCategory === 'all' 
                 ? products 
                 : products.filter(p => p.category === currentCategory);
@@ -2005,9 +2176,8 @@
             
             productGrid.innerHTML = filteredProducts.map(product => `
                 <div class="product-item" data-id="${product.id}" data-category="${product.category}">
-                    <div class="product-image-container" onclick="window.openImage(${product.id})">
-                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy"
-                             onerror="this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjQwMCIgdmlld0JveD0iMCAwIDMyMCA0MDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjMyMCIgaGVpZ2h0PSI0MDAiIGZpbGw9IiMxNDE0MTQiLz48dGV4dCB4PSIxNjAiIHk9IjIwMCIgZm9udC1mYW1pbHk9IkFyaWFsIiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkb21pbmFudC1iYXNlbGluZT0ibWlkZGxlIj5Qcm9kdWN0IEltYWdlPC90ZXh0Pjwvc3ZnPg=='">
+                    <div class="product-image-container" onclick="openImage(${product.id})">
+                        <img src="${product.image}" alt="${product.name}" class="product-image" loading="lazy">
                     </div>
                     <div class="product-info">
                         <div class="product-category">${product.category.charAt(0).toUpperCase() + product.category.slice(1)}</div>
@@ -2017,27 +2187,6 @@
                     </div>
                 </div>
             `).join('');
-            
-            attachProductEvents();
-        }
-
-        function attachProductEvents() {
-            // Add to cart buttons
-            document.querySelectorAll('.add-to-cart-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const productId = parseInt(btn.dataset.id);
-                    addToCart(productId);
-                });
-            });
-            
-            // Cart modal image click events
-            document.querySelectorAll('.cart-modal-item-image').forEach(img => {
-                img.addEventListener('click', function() {
-                    const productId = parseInt(this.closest('.cart-modal-item').querySelector('.cart-modal-quantity-btn').onclick.toString().match(/\d+/)[0]);
-                    openImageModal(productId);
-                });
-            });
         }
 
         // ===== CART FUNCTIONS =====
@@ -2099,11 +2248,15 @@
         }
 
         function updateCartCount() {
+            if (!floatingCartCount) return;
+            
             const totalItems = cart.reduce((total, item) => total + item.quantity, 0);
             floatingCartCount.textContent = totalItems;
         }
 
         function renderCartModal() {
+            if (!cartModalBody) return;
+            
             if (cart.length === 0) {
                 cartModalBody.innerHTML = `
                     <div class="empty-state">
@@ -2112,8 +2265,8 @@
                         <p style="font-size: 12px; margin-top: 10px;">Add some items to get started</p>
                     </div>
                 `;
-                modalCartTotal.textContent = '0';
-                modalCheckoutBtn.disabled = true;
+                if (modalCartTotal) modalCartTotal.textContent = '0';
+                if (modalCheckoutBtn) modalCheckoutBtn.disabled = true;
                 return;
             }
 
@@ -2126,16 +2279,16 @@
 
                 html += `
                     <div class="cart-modal-item">
-                        <img src="${item.image}" alt="${item.name}" class="cart-modal-item-image" onclick="window.openImage(${item.id})" style="cursor: pointer;">
+                        <img src="${item.image}" alt="${item.name}" class="cart-modal-item-image" onclick="openImage(${item.id})" style="cursor: pointer;">
                         <div class="cart-modal-item-details">
                             <div class="cart-modal-item-name">${item.name}</div>
                             <div class="cart-modal-item-price">₹${item.price.toLocaleString('en-IN')}</div>
                             <div class="cart-modal-item-actions">
-                                <button class="cart-modal-quantity-btn" onclick="window.cartUpdateQuantity(${item.id}, -1)">-</button>
+                                <button class="cart-modal-quantity-btn" onclick="cartUpdateQuantity(${item.id}, -1)">-</button>
                                 <input type="number" class="cart-modal-quantity-input" value="${item.quantity}" min="1" 
-                                       onchange="window.cartUpdateQuantity(${item.id}, 0, this.value)">
-                                <button class="cart-modal-quantity-btn" onclick="window.cartUpdateQuantity(${item.id}, 1)">+</button>
-                                <button class="cart-modal-remove" onclick="window.cartRemoveItem(${item.id})">
+                                       onchange="cartUpdateQuantity(${item.id}, 0, this.value)">
+                                <button class="cart-modal-quantity-btn" onclick="cartUpdateQuantity(${item.id}, 1)">+</button>
+                                <button class="cart-modal-remove" onclick="cartRemoveItem(${item.id})">
                                     <i class="fas fa-trash"></i>
                                 </button>
                             </div>
@@ -2145,56 +2298,22 @@
             });
 
             cartModalBody.innerHTML = html;
-            modalCartTotal.textContent = total.toLocaleString('en-IN');
-            modalCheckoutBtn.disabled = false;
+            if (modalCartTotal) modalCartTotal.textContent = total.toLocaleString('en-IN');
+            if (modalCheckoutBtn) modalCheckoutBtn.disabled = false;
         }
 
         function openCartModal() {
             cartModal.classList.add('active');
+            document.body.style.overflow = 'hidden';
             renderCartModal();
         }
 
         function closeCartModal() {
             cartModal.classList.remove('active');
+            document.body.style.overflow = 'auto';
         }
 
         // ===== EVENT HANDLERS =====
-        function toggleMobileMenu() {
-            navMenu.classList.toggle('active');
-        }
-
-        function handleNavigation(e) {
-            e.preventDefault();
-            const pageId = e.target.getAttribute('data-page') + '-page';
-
-            // Update active navigation
-            navLinks.forEach(link => link.classList.remove('active'));
-            e.target.classList.add('active');
-
-            // Close mobile menu
-            navMenu.classList.remove('active');
-
-            // Show selected page
-            pages.forEach(page => {
-                page.classList.remove('active');
-                if (page.id === pageId) {
-                    page.classList.add('active');
-                }
-            });
-
-            // Special handling for admin page
-            if (pageId === 'admin-page') {
-                const password = prompt('Enter admin password:');
-                if (password !== 'deepak@321') {
-                    alert('Incorrect password. Redirecting to shop.');
-                    navLinks[0].click();
-                    return;
-                }
-                updateAdminStats();
-                showProductsList(); // Default to products list
-            }
-        }
-
         async function handleContactSubmit(e) {
             e.preventDefault();
             
@@ -2248,39 +2367,28 @@
         }
 
         function handleAdminLogout() {
-            navLinks[0].click();
-        }
-
-        function setupCategoryFilters() {
-            const categoryButtons = document.querySelectorAll('.category-btn');
-            categoryButtons.forEach(btn => {
-                btn.addEventListener('click', function() {
-                    // Update active button
-                    categoryButtons.forEach(b => {
-                        if (b.closest('.category-filter') === this.closest('.category-filter')) {
-                            b.classList.remove('active');
-                        }
-                    });
-                    this.classList.add('active');
-                    
-                    // Update category and render
-                    currentCategory = this.dataset.category;
-                    renderProducts();
-                });
-            });
+            document.querySelector('.nav-links a[data-page="shop"]').click();
         }
 
         // ===== UTILITY FUNCTIONS =====
         function updateButtonStates() {
             const hasItems = cart.length > 0;
-            modalCheckoutBtn.disabled = !hasItems;
+            if (modalCheckoutBtn) modalCheckoutBtn.disabled = !hasItems;
         }
 
         function updateAdminStats() {
-            document.getElementById('totalOrders').textContent = Math.floor(Math.random() * 100) + 50;
-            document.getElementById('totalRevenue').textContent = '₹' + (Math.floor(Math.random() * 5000000) + 1000000).toLocaleString('en-IN');
-            document.getElementById('totalProducts').textContent = products.length;
-            document.getElementById('totalCustomers').textContent = Math.floor(Math.random() * 500) + 200;
+            if (document.getElementById('totalOrders')) {
+                document.getElementById('totalOrders').textContent = Math.floor(Math.random() * 100) + 50;
+            }
+            if (document.getElementById('totalRevenue')) {
+                document.getElementById('totalRevenue').textContent = '₹' + (Math.floor(Math.random() * 5000000) + 1000000).toLocaleString('en-IN');
+            }
+            if (document.getElementById('totalProducts')) {
+                document.getElementById('totalProducts').textContent = products.length;
+            }
+            if (document.getElementById('totalCustomers')) {
+                document.getElementById('totalCustomers').textContent = Math.floor(Math.random() * 500) + 200;
+            }
         }
 
         function showNotification(message, type = 'success') {
