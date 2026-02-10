@@ -203,9 +203,13 @@
             font-size: 16px; 
             font-weight: 500;
             margin-bottom: 10px;
-            height: 45px;
-            overflow: hidden;
+            height: auto;
+            min-height: 40px;
             line-height: 1.4;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;
         }
         
         .product-price { 
@@ -379,6 +383,7 @@
             font-size: 18px;
             font-weight: 500;
             margin-bottom: 5px;
+            line-height: 1.3;
         }
         
         .modal-product-price {
@@ -1022,7 +1027,8 @@
             
             .product-name {
                 font-size: 14px;
-                height: 40px;
+                min-height: 36px;
+                -webkit-line-clamp: 2;
                 line-height: 1.3;
             }
             
@@ -1138,7 +1144,8 @@
             
             .product-name {
                 font-size: 13px;
-                height: 36px;
+                min-height: 34px;
+                -webkit-line-clamp: 2;
                 margin-bottom: 8px;
             }
             
@@ -1225,7 +1232,8 @@
             
             .product-name {
                 font-size: 12px;
-                height: 34px;
+                min-height: 32px;
+                -webkit-line-clamp: 2;
             }
             
             .product-price {
@@ -1607,7 +1615,7 @@
         let products = JSON.parse(localStorage.getItem('products')) || [
             {
                 id: 1,
-                name: "Red Woven Design Silk Blend A-Line Suit Set",
+                name: "Red Woven Silk Blend A-Line Suit Set",
                 category: "suit",
                 price: 7499,
                 image: "https://www.libas.in/cdn/shop/files/49888_7Main_bf164335-fe8e-4975-afe6-a9e1554ba45c.jpg?v=1761741189&width=800",
@@ -1615,7 +1623,7 @@
             },
             {
                 id: 2,
-                name: "Black Embroidered Silk Blend Straight Suit Set",
+                name: "Black Embroidered Silk Blend Suit Set",
                 category: "suit",
                 price: 8499,
                 image: "https://www.libas.in/cdn/shop/files/51629_1.jpg?v=1767026133&width=800",
@@ -1623,7 +1631,7 @@
             },
             {
                 id: 3,
-                name: "Green Embroidered Silk Blend Straight Suit Set",
+                name: "Green Embroidered Silk Blend Suit Set",
                 category: "suit",
                 price: 7999,
                 image: "https://www.libas.in/cdn/shop/files/green-embroidered-silk-blend-straight-suit-set-with-dupatta-51786.jpg?v=1767025499&width=800",
@@ -1631,7 +1639,7 @@
             },
             {
                 id: 4,
-                name: "Green Embroidered Chinon Straight Suit Set",
+                name: "Green Embroidered Chinon Suit Set",
                 category: "suit",
                 price: 9299,
                 image: "https://www.libas.in/cdn/shop/files/green-embroidered-chinon-straight-suit-set-with-dupatta-51833.jpg?v=1766940402&width=800",
@@ -1663,7 +1671,7 @@
             },
             {
                 id: 8,
-                name: "Beige Woven Design Silk Kurta Set",
+                name: "Beige Woven Silk Kurta Set",
                 category: "kurta",
                 price: 9999,
                 image: "https://www.libas.in/cdn/shop/files/beige-woven-design-silk-straight-kurta-with-trouser-and-dupatta-libas-1.jpg?v=1760898173&width=800",
@@ -1765,6 +1773,9 @@
         const productImageInput = document.getElementById('productImage');
         const productDescriptionInput = document.getElementById('productDescription');
 
+        // Track event listeners to prevent duplication
+        let eventListenersAttached = false;
+
         // ===== INITIALIZATION =====
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
@@ -1841,24 +1852,34 @@
             // Keyboard navigation for image modal
             document.addEventListener('keydown', handleKeyboardNavigation);
             
-            // Add to cart button events (delegated)
-            document.addEventListener('click', function(e) {
-                if (e.target.classList.contains('add-to-cart-btn')) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    const productId = parseInt(e.target.dataset.id);
-                    if (productId) addToCart(productId);
-                }
-                
-                // Category filter buttons
-                if (e.target.classList.contains('category-btn')) {
-                    e.preventDefault();
-                    const category = e.target.dataset.category;
-                    if (category) {
-                        filterProducts(category, e.target);
+            // Use event delegation for Add to Cart buttons (ONE TIME SETUP)
+            if (!eventListenersAttached) {
+                // Single event listener for all "Add to Cart" buttons
+                document.addEventListener('click', function(e) {
+                    // Check if the clicked element or its parent has the add-to-cart-btn class
+                    const addToCartBtn = e.target.closest('.add-to-cart-btn');
+                    if (addToCartBtn) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const productId = parseInt(addToCartBtn.dataset.id);
+                        if (productId && !isNaN(productId)) {
+                            addToCart(productId);
+                        }
                     }
-                }
-            });
+                    
+                    // Category filter buttons
+                    if (e.target.classList.contains('category-btn')) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        const category = e.target.dataset.category;
+                        if (category) {
+                            filterProducts(category, e.target);
+                        }
+                    }
+                });
+                
+                eventListenersAttached = true;
+            }
         }
 
         function toggleMobileMenu() {
@@ -1904,21 +1925,25 @@
         function setupCategoryFilters() {
             const categoryButtons = document.querySelectorAll('.category-btn');
             categoryButtons.forEach(btn => {
-                btn.addEventListener('click', function(e) {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    
-                    // Update active button
-                    categoryButtons.forEach(b => {
-                        b.classList.remove('active');
-                    });
-                    this.classList.add('active');
-                    
-                    // Update category and render
-                    currentCategory = this.dataset.category;
-                    renderProducts();
-                });
+                // Remove existing listeners first to prevent duplication
+                btn.removeEventListener('click', handleCategoryFilter);
+                btn.addEventListener('click', handleCategoryFilter);
             });
+        }
+
+        function handleCategoryFilter(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            
+            // Update active button
+            document.querySelectorAll('.category-btn').forEach(b => {
+                b.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Update category and render
+            currentCategory = this.dataset.category;
+            renderProducts();
         }
 
         function filterProducts(category, button) {
